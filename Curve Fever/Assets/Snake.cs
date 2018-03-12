@@ -19,4 +19,9 @@ public class Snake : MonoBehaviour {
         transform.Translate(Vector2.up * speed * Time.fixedDeltaTime, Space.Self);
         transform.Rotate(Vector3.forward * -horizontal * rotationSpeed * Time.fixedDeltaTime);
     }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log(col.name);
+    }
 }

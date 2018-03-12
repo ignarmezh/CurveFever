@@ -13,12 +13,12 @@ public class Tail : MonoBehaviour {
     List<Vector2> points;
 
     LineRenderer line;
-    EdgeCollider2D collider;
+    EdgeCollider2D colliderEdge;
 
 	// Use this for initialization
 	void Start () {
         line = GetComponent<LineRenderer>();
-        collider = GetComponent<EdgeCollider2D>();
+        colliderEdge = GetComponent<EdgeCollider2D>();
         points = new List<Vector2>();
         SetPoint();
     }
@@ -28,7 +28,6 @@ public class Tail : MonoBehaviour {
         if (Vector3.Distance(points.Last(),snake.position) > pointSpacing)
         {
             SetPoint(); 
-
         }
 
 	}
@@ -40,6 +39,7 @@ public class Tail : MonoBehaviour {
         line.positionCount = points.Count;
         line.SetPosition(points.Count - 1,snake.position);
 
-        collider.points = points.ToArray<Vector2>();
+        if (points.Count > 1)
+            colliderEdge.points = points.ToArray();
     }
 }
