@@ -6,11 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(EdgeCollider2D))]
 public class Tail : MonoBehaviour {
 
-    public float pointSpacing = .1f;
+    public float pointSpacingForColliderEdge = 0.1f;
 
     public Transform snake;
 
-    List<Vector2> points;
+    List<Vector2> pointsColliderEdge;
+    List<Vector2> pointsLineRend;
 
     LineRenderer line;
     EdgeCollider2D colliderEdge;
@@ -19,27 +20,35 @@ public class Tail : MonoBehaviour {
 	void Start () {
         line = GetComponent<LineRenderer>();
         colliderEdge = GetComponent<EdgeCollider2D>();
-        points = new List<Vector2>();
-        SetPoint();
+        pointsColliderEdge = new List<Vector2>();
+        pointsLineRend = new List<Vector2>();
+        SetPointColliderEdge();
+        SetPointLine();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Vector3.Distance(points.Last(),snake.position) > pointSpacing)
+        if (Vector3.Distance(pointsColliderEdge.Last(),snake.position) > pointSpacingForColliderEdge)
         {
-            SetPoint(); 
+            SetPointColliderEdge(); 
         }
+        SetPointLine();
+    }
 
-	}
-
-    void SetPoint()
+    void SetPointColliderEdge()
     {
-        points.Add(transform.position);
+        if (pointsColliderEdge.Count > 1)
+            colliderEdge.points = pointsColliderEdge.ToArray();
+        pointsColliderEdge.Add(snake.position);
+        
+    }
 
-        line.positionCount = points.Count;
-        line.SetPosition(points.Count - 1,snake.position);
+    void SetPointLine()
+    {
+        pointsLineRend.Add(snake.position);
 
-        if (points.Count > 1)
-            colliderEdge.points = points.ToArray();
+        line.positionCount = pointsLineRend.Count;
+        line.SetPosition(pointsLineRend.Count - 1,snake.position);
+        
     }
 }
